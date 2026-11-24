@@ -1,0 +1,23 @@
+Bem-vindo à primeira aula da nossa formação dirigida por projeto. Nossa missão é construir um agente de coleta de métricas Linux. Antes de programar, precisamos compreender os dados que vamos coletar.
+
+A missão. Construir um agente que coleta indicadores de um servidor Linux e produz JSON. Nesta aula, vamos compreender de onde vêm os indicadores, antes de escrever o agente. A primeira entrega será um relatório manual reproduzível, com evidências obtidas do sistema. Agora pense na seguinte questão: Diferencie medir um recurso de diagnosticar um incidente.
+
+Kernel e espaço de usuário. O kernel administra CPU, memória, dispositivos e processos. Aplicações executam normalmente em espaço de usuário e solicitam serviços ao kernel por chamadas de sistema. Uma biblioteca pode encapsular essas chamadas: open, read e close são exemplos. O shell é uma aplicação, não o kernel. Agora pense na seguinte questão: Ao executar cat /proc/meminfo, quem fornece o conteúdo?
+
+Interfaces de observação. /proc é um sistema de arquivos virtual que expõe informações do kernel e dos processos; /sys expõe objetos e atributos do kernel, inclusive dispositivos. Ler um arquivo virtual não equivale necessariamente a ler um bloco de disco. Muitos valores são gerados no momento da leitura. Agora pense na seguinte questão: Compare /proc/uptime e um arquivo comum em /tmp.
+
+Processos e threads. Um processo possui um espaço de endereçamento e recursos; threads de um mesmo processo compartilham parte desses recursos e são escalonadas individualmente. Uma thread pode executar enquanto outra aguarda uma operação. O estado R indica execução ou espera por CPU; D indica espera ininterruptível, frequentemente por I/O. Agora pense na seguinte questão: Por que um processo multithread pode usar mais de 100% de CPU?
+
+CPU: contadores e taxas. A linha cpu de /proc/stat contém contadores acumulados de tempo em diferentes estados. Uma amostra isolada não informa a utilização durante um intervalo. Colete duas amostras e calcule deltas. Para uma aproximação da atividade, subtraia do total o delta de idle e iowait; não some guest e guest_nice novamente, pois já integram outros campos. Iowait tem limitações e não mede diretamente latência de disco. Agora pense na seguinte questão: Explique por que um contador acumulado não é uma porcentagem.
+
+Load average. As três médias de carga correspondem a 1, 5 e 15 minutos, com suavização exponencial. No Linux, incluem tarefas executáveis e tarefas em espera ininterruptível. Uma carga de 12 em uma máquina de 8 CPUs lógicas sugere investigar filas, mas não prova saturação de CPU. Use vmstat e iostat para distinguir hipóteses. Agora pense na seguinte questão: Que hipótese levantaria se a carga fosse alta e a CPU estivesse ociosa?
+
+Memória. MemFree indica páginas livres; MemAvailable estima a memória disponível para novas aplicações sem swap. O cache pode ser recuperado sob pressão, mas nem todo cache é recuperável. A métrica inicial do agente deve usar MemAvailable e MemTotal, preservando as unidades. Agora pense na seguinte questão: Por que não devemos alertar apenas com MemFree?
+
+Limites e escopo. Um container compartilha o kernel do hospedeiro. Namespaces isolam visões de recursos; cgroups contabilizam e limitam recursos. A leitura de /proc pode refletir o host, não o limite do container. Em cgroups v2, memory.max e cpu.max ajudam a entender limites. Nesta missão, o agente executará no host. Agora pense na seguinte questão: Por que um container pode sofrer OOM mesmo com RAM livre no host?
+
+Laboratório e validação. Use uma máquina Linux de laboratório. Execute nproc, lscpu, uptime, head -n 5 /proc/stat, grep -E "MemTotal|MemAvailable" /proc/meminfo e vmstat 1 5. Registre a saída, explique cada indicador e compare duas amostras de CPU separadas por um segundo. Não altere configurações do host. Agora pense na seguinte questão: Entregue um relatório com valores, unidades, intervalo e interpretação.
+
+Próxima etapa. Após validar o relatório, aprenderemos Python: leitura de arquivos, conversão de tipos, funções, tratamento de erros e serialização JSON. O agente deverá distinguir falha de coleta de valor zero, registrar timestamp UTC e identificar o host. Agora pense na seguinte questão: Descreva como você verificaria se uma métrica coletada é confiável.
+
+Na próxima aula, começaremos a transformar essas observações em código Python. Faça o laboratório quando estiver no computador.
