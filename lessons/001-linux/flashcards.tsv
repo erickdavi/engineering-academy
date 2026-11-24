@@ -1,0 +1,10 @@
+O que administra recursos do sistema?	O kernel.
+O que é /proc?	Sistema de arquivos virtual com informações do kernel e processos.
+O que significa estado R?	Executando ou aguardando CPU.
+O que significa estado D?	Espera ininterruptível.
+Load average é percentual de CPU?	Não. Mede carga de tarefas executáveis e em espera ininterruptível.
+Por que coletar duas amostras de CPU?	Para calcular deltas dos contadores.
+Qual métrica estima RAM disponível?	MemAvailable.
+Qual mecanismo limita recursos de containers?	Cgroups.
+Qual mecanismo isola visões de recursos?	Namespaces.
+Qual o escopo inicial do agente?	Host Linux.
